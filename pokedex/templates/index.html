@@ -1,34 +1,33 @@
-<html>
-<head>
-    <title>Pokedex</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-</head>
-<body>
-    <div class="container">
-        <div class="bg-primary text-white p-4 text-center">
-            <h1>Mi Pokedex</h1>
+{% extends "base.html" %}
+{% block content %}
+<p class="p-2">Hola, este es tu primer sitio en Django</p>
+
+<h2>Pokemons</h2>
+<div class="row">
+    {% for pokemon in pokemons %}
+    <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
+        <div class="card" style="width: 18rem;">
+            <img src="{{ pokemon.picture.url }}" class="card-img-top" alt="{{ pokemon.name }}">
+            <div class="card-body text-center">
+                <h5 class="card-title">
+                    <a href="{% url 'pokemon' pokemon.id %}" class="text-decoration-none">
+                        {{ pokemon.name|capfirst }}
+                    </a>
+                </h5>
+            </div>
         </div>
-        <p class="p-2">Hola, este es tu primer sitio en Django</p>
-
-        <h2>Pokemons</h2>
-        <ul class="list-group mb-4">
-            {% for pokemon in pokemons %}
-            <li class="list-group-item">
-                <a href="{% url 'pokemon' pokemon.id %}">{{ pokemon.name|capfirst }}</a>
-            </li>
-            {% endfor %}
-        </ul>
-
-        <h2>Entrenadores</h2>
-        <ul class="list-group">
-            {% for trainer in trainers %}
-            <li class="list-group-item">
-                <a href="{% url 'display_trainer' trainer.id %}">{{ trainer.first_name }} {{ trainer.last_name }}</a>
-            </li>
-            {% endfor %}
-        </ul>
-
     </div>
-</body>
-</html>
+    {% endfor %}
+</div>
+
+<h2 class="mt-4">Entrenadores</h2>
+<ul class="list-group">
+    {% for trainer in trainers %}
+    <li class="list-group-item">
+        <a href="{% url 'display_trainer' trainer.id %}">
+            {{ trainer.first_name }} {{ trainer.last_name }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock content %}
