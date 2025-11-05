@@ -2,18 +2,31 @@
 {% block content %}
 <p class="p-2">Hola, este es tu primer sitio en Django</p>
 
-<h2>Pokemons</h2>
+<h2 class="d-flex justify-content-between align-items-center">
+    Pokémons
+    <a href="{% url 'pokedex:add_pokemon' %}" class="btn btn-primary btn-sm">
+        ➕ Agregar Pokémon
+    </a>
+</h2>
+
 <div class="row">
     {% for pokemon in pokemons %}
     <div class="col-sm-12 col-md-6 col-lg-4 mb-3">
-        <div class="card" style="width: 18rem;">
+        <div class="card shadow-sm" style="width: 18rem;">
             <img src="{{ pokemon.picture.url }}" class="card-img-top" alt="{{ pokemon.name }}">
             <div class="card-body text-center">
-                <h5 class="card-title">
-                    <a href="{% url 'pokemon' pokemon.id %}" class="text-decoration-none">
-                        {{ pokemon.name|capfirst }}
+                <h5 class="card-title">{{ pokemon.name|capfirst }}</h5>
+                <div class="d-flex justify-content-center gap-2">
+                    <a href="{% url 'pokedex:pokemon' pokemon.id %}" class="btn btn-outline-primary btn-sm">
+                        👁️ Ver
                     </a>
-                </h5>
+                    <a href="{% url 'pokedex:edit_pokemon' pokemon.id %}" class="btn btn-outline-warning btn-sm">
+                        ✏️ Editar
+                    </a>
+                    <a href="{% url 'pokedex:delete_pokemon' pokemon.id %}" class="btn btn-outline-danger btn-sm">
+                        🗑️ Eliminar
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -24,7 +37,7 @@
 <ul class="list-group">
     {% for trainer in trainers %}
     <li class="list-group-item">
-        <a href="{% url 'display_trainer' trainer.id %}">
+        <a href="{% url 'pokedex:display_trainer' trainer.id %}">
             {{ trainer.first_name }} {{ trainer.last_name }}
         </a>
     </li>
