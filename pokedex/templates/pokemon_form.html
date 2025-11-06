@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{% if form.instance.pk %}Editar Pokémon{% else %}Agregar Pokémon{% endif %}</h2>
+
+<form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    <div class="mb-3">
+        {{ form.non_field_errors }}
+    </div>
+
+    {% for field in form %}
+        <div class="mb-3">
+            <label class="form-label">{{ field.label_tag }} </label>
+            {{ field }}
+            {% if field.help_text %}
+                <div class="form-text">{{ field.help_text }}</div>
+            {% endif %}
+            {% for error in field.errors %}
+                <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-success">Guardar</button>
+    <a href="{% url 'pokedex:index' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock content %}
