@@ -1,10 +1,13 @@
 from django.http import HttpResponse
 from django.template import loader
-from .models import Pokemon, Trainer
-from pokedex.forms import PokemonForm
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
+# Asegúrate de importar ambos forms
+from .forms import PokemonForm, EntrenadorForm 
+from .models import Pokemon, Trainer
+
+# --- Vistas Públicas (Cualquiera puede ver) ---
 
 def index(request):
     pokemons = Pokemon.objects.all()
@@ -17,20 +20,27 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 def pokemon(request, id):
-    pokemon = Pokemon.objects.get(id=id)
+    # Usar get_object_or_404 es más seguro que .get() por si el ID no existe
+    pokemon = get_object_or_404(Pokemon, id=id) 
     template = loader.get_template('display_pokemon.html')
     context = {
         'pokemon': pokemon
     }
     return HttpResponse(template.render(context, request))
 
+def trainer_list(request):
+    trainers = Trainer.objects.all() 
+    return render(request, 'trainer_list.html', {'trainers': trainers})
+
 def display_trainer(request, id):
-    trainer = Trainer.objects.get(id=id)
+    trainer = get_object_or_404(Trainer, id=id)
     template = loader.get_template('display_trainer.html')
     context = {
         'trainer': trainer
     }
     return HttpResponse(template.render(context, request))
+
+# --- Vistas Privadas (Requieren Login) ---
 
 @login_required
 def add_pokemon(request):
@@ -46,7 +56,7 @@ def add_pokemon(request):
 
 @login_required
 def edit_pokemon(request, pokemon_id):
-    pokemon = Pokemon.objects.get(pk=pokemon_id)
+    pokemon = get_object_or_404(Pokemon, pk=pokemon_id)
     if request.method == 'POST':
         form = PokemonForm(request.POST, request.FILES, instance=pokemon)
         if form.is_valid():
@@ -58,9 +68,22 @@ def edit_pokemon(request, pokemon_id):
 
 @login_required
 def delete_pokemon(request, pokemon_id):
-    pokemon = Pokemon.objects.get(pk=pokemon_id)
+    pokemon = get_object_or_404(Pokemon, pk=pokemon_id)
     pokemon.delete()
     return redirect('pokedex:index')
+
+
+@login_required
+def add_trainer(request):
+    if request.method == "POST":
+        form = EntrenadorForm(request.POST) 
+        if form.is_valid():
+            form.save()
+            return redirect('pokedex:trainer_list') 
+    else:
+        form = EntrenadorForm()
+    # Puedes reusar un template genérico o crear uno nuevo 'trainer_form.html'
+    return render(request, 'trainer_form.html', {'form': form})
 
 class CustomLoginView(LoginView):
     template_name = 'login_form.html'

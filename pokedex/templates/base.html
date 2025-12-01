@@ -12,13 +12,42 @@
     <div class="bg-primary text-white p-4 text-center">
         <img src="{% static 'logo.png' %}" alt="" class="img-fluid">
     </div>
-    {% if user.is_authenticated %}
-        <span>Bienvenido, {{ user.username }}!</span>
-    <a href="{% url 'logout' %}" >Salir</a>
-    {% else %}
-        <a href="{% url 'pokedex:login' %}">Ingresar</a>
-    {% endif %}
-    {% block content %}{% endblock content %}
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'pokedex:index' %}">Pokedex</a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          
+            <li class="nav-item">
+    <a class="btn btn-primary" href="{% url 'pokedex:trainers' %}">Entrenadores</a>        
+   </li>
+          </ul>
+
+    
+        </div>
+      </div>
+      
+          <div class="d-flex align-items-center">
+            {% if user.is_authenticated %}
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-danger btn-sm" type="submit">Salir</button>
+                </form>
+            {% else %}
+                <a href="{% url 'pokedex:login' %}" class="btn btn-dark btn-sm">Ingresar</a>
+            {% endif %}
+          </div>
+    </nav>
+
+    <div class="mt-4">
+        {% block content %}{% endblock content %}
+    </div>
 </div>
 
 </body>
