@@ -9,8 +9,6 @@ router = routers.DefaultRouter()
 router.register(r'pokemons', views.PokemonViewSet)
 router.register(r'entrenadores', views.EntrenadorViewSet)
 
-# 3. Definimos urlpatterns UNA sola vez al final
 urlpatterns = [
-    # Usamos cadena vacía '' porque el prefijo 'api/' ya está en el archivo principal (lab8/urls.py)
     path('', include(router.urls)),
 ]
