@@ -5,6 +5,11 @@ from pokedex.forms import PokemonForm
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
+from .models import Trainer 
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+from .models import Trainer
 
 def index(request):
     pokemons = Pokemon.objects.all()
@@ -56,12 +61,19 @@ def edit_pokemon(request, pokemon_id):
         form = PokemonForm(instance=pokemon)
     return render(request, 'pokemon_form.html', {'form': form})
 
-@login_required
+
 def delete_pokemon(request, pokemon_id):
     pokemon = get_object_or_404(Pokemon, pk=pokemon_id)
     # Nota: para una confirmación podrías mostrar una plantilla; aquí se borra directamente.
     pokemon.delete()
     return redirect('pokedex:index')
 
+@login_required
+def trainer_list(request):
+    trainers = Trainer.objects.all() 
+    return render(request, 'trainer_list.html', {'trainers': trainers})
+
 class CustomLoginView(LoginView):
     template_name = "login_form.html"
+
+    

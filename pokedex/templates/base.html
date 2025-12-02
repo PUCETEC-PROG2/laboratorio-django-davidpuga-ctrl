@@ -12,13 +12,55 @@
 <div class="container">
     <div class="bg-primary text-white p-4 text-center">
         <img src="{% static 'logo.svg' %}" alt="" class="logo">
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <!-- Título del navbar -->
+                <a class="navbar-brand" href="{% url 'pokedex:index' %}">Pokedex</a>
+
+                <!-- Botón para móviles -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Opciones del menú -->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'pokedex:trainers' %}">
+                                Entrenadores
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <!-- Botones Login / Logout -->
+                    
+                </div>
+            </div>
+            <div class="d-flex align-items-center">
+                        {% if user.is_authenticated %}
+                            <form action="{% url 'logout' %}" method="post">
+                                {% csrf_token %}
+                                <button class="btn btn-danger btn-sm" type="submit">
+                                    Salir
+                                </button>
+                            </form>
+                        {% else %}
+                            <a href="{% url 'pokedex:login' %}" class="btn btn-light btn-sm">
+                                Ingresar
+                            </a>
+                        {% endif %}
+                    </div>
+        </nav>
     </div>
-    {% if user.is_authenticated %}
-        <a href="{% url "logout"%}">Salir</a>
-    {% else %}
-        <a href="{% url "pokedex:login"%}">Ingresar</a>
-    {% endif %}
+
+    <!-- Donde irán tus páginas -->
     {% block content %}{% endblock content %}
+
 </div>
 
 </body>
