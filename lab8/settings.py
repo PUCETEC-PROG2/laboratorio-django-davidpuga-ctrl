@@ -37,10 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
+    'rest_framework',  # <-- Mantenemos la primera instancia
     'oauth2_provider',
     'pokedex',
-    'api'
+    'api',
+    # 'rest_framework',  <-- ¡ESTA LÍNEA DUPLICADA FUE ELIMINADA!
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -51,11 +53,18 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', 
     'oauth2_provider.middleware.OAuth2TokenMiddleware',
 ]
 
 ROOT_URLCONF = 'lab8.urls'
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173", # Puerto de Vite/React
+    "http://127.0.0.1:5173",
+    "http://localhost:8000", # Puerto de Django (si lo necesitas)
+    "http://127.0.0.1:8000",
+]
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
