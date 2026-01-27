@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Formulario de Pokémon{% endblock title %}
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+       <a href="{% url 'pokedex:index' %}" class="btn btn-secondary mt-3">Regresar</a>
+    </form>
+    
+</div>
+
+{% endblock content %}

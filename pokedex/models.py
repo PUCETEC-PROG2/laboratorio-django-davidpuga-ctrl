@@ -1,0 +1,23 @@
+from django.db import models
+
+class Pokemon(models.Model):
+    name = models.CharField(max_length=31, null=False)
+    type = models.CharField(max_length=30, null=False)
+    weight = models.DecimalField(decimal_places=4, max_digits=6)
+    height = models.DecimalField(decimal_places=4, max_digits=6)
+    picture = models.ImageField(upload_to='pokemon_picture/', null=True, blank=True)
+    
+    def __str__(self):
+        return self.name
+
+class Trainer(models.Model):
+    first_name = models.CharField(max_length=50)       
+    last_name = models.CharField(max_length=50)        
+    age = models.PositiveIntegerField()          
+    date_of_birth = models.DateField()       
+    level = models.PositiveIntegerField()
+    # Nuevo campo para que sea igual al de Pokemon
+    picture = models.ImageField(upload_to='trainer_picture/', null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"

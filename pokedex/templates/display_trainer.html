@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="mt-3">
+    <p>Has elegido el entrenador: <strong>{{ trainer.first_name }} {{ trainer.last_name }}</strong></p>
+
+    {% if trainer.picture %}
+        <img src="{{ trainer.picture.url }}" alt="{{ trainer.first_name }}" class="img-fluid mb-3">
+    {% else %}
+        <p>No hay imagen disponible.</p>
+    {% endif %}
+
+    <h3>Detalles del entrenador</h3>
+    <ul class="list-group">
+        <li class="list-group-item"><strong>Nombre completo:</strong> {{ trainer.first_name }} {{ trainer.last_name }}</li>
+        <li class="list-group-item"><strong>Nivel:</strong> {{ trainer.level }}</li>
+        <li class="list-group-item"><strong>Edad:</strong> {{ trainer.age }}</li>
+        <li class="list-group-item"><strong>Fecha de Nacimiento:</strong> {{ trainer.date_of_birth }}</li>
+    </ul>
+
+    <div class="mt-3">
+        <a href="{% url 'pokedex:index' %}" class="btn btn-secondary">Regresar</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'pokedex:edit_trainer' trainer.id %}" class="btn btn-warning">Editar</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
